@@ -2,14 +2,14 @@
   "name": "claudes-fables",
   "private": true,
   "version": "1.0.0",
-  "type": "module",
   "description": "Claude's Fables — a bedtime app where the child is the hero and makes the moral choice themselves.",
   "scripts": {
     "gen:prompts": "node scripts/gen-prompts.mjs",
     "prebuild": "node scripts/gen-prompts.mjs",
     "predev": "node scripts/gen-prompts.mjs",
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/build-api.mjs",
+    "build:api": "node scripts/build-api.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit"
   },
@@ -23,6 +23,8 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
+    "esbuild": "^0.28.1",
+    "playwright": "^1.60.0",
     "typescript": "^5.6.3",
     "vite": "^5.4.11"
   }

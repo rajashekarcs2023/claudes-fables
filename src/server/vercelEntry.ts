@@ -1,9 +1,15 @@
-// Vercel serverless function: POST /api/fable.
-// Thin adapter — all logic lives in src/server/fable.ts so the dev middleware
-// (vite.config.ts) and this function share ONE handler. The ANTHROPIC_API_KEY
-// is read server-side only, never shipped to the client.
+// Source for the Vercel serverless function. It is bundled by
+// scripts/build-api.mjs into a single self-contained file at api/fable.js
+// (esbuild inlines the whole src import graph; only @anthropic-ai/sdk stays
+// external and is resolved from node_modules on Vercel). This sidesteps
+// Vercel's per-file TS transpile (which does NOT bundle cross-directory imports
+// and otherwise fails with ERR_MODULE_NOT_FOUND).
+//
+// All real logic lives in ./fable so the dev middleware (vite.config.mts) and
+// the deployed function share ONE handler. The ANTHROPIC_API_KEY is read
+// server-side only, never shipped to the client.
 
-import { handleFableRequest, emergencyFallback } from "../src/server/fable";
+import { handleFableRequest, emergencyFallback } from "./fable";
 
 // Loosely typed to avoid a hard dependency on @vercel/node types.
 interface VercelRequest {
