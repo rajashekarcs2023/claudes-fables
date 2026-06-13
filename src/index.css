@@ -1,0 +1,329 @@
+/* ============================================================================
+   Claude's Fables — the tender-ui design system.
+   The feeling, in one line: being read to under a warm lamp.
+   Palette is the fixed storybook-art bedtime palette. Nothing clinical, nothing
+   neon, nothing that raises a child's heart rate.
+   ========================================================================== */
+
+:root {
+  /* fixed bedtime palette (storybook-art skill) */
+  --night: #1f2a4d;
+  --night-2: #243056;
+  --night-3: #2b3a63;
+  --moon: #f4e6c1;
+  --stars: #fdf6e3;
+  --earth: #3a2c1f;
+  --foliage: #2e4a3a;
+  --crow: #232a42;
+  --wing: #2e3656;
+  --amber: #e0a458;
+  --amber-deep: #c8863b;
+  --card: #fbf3e4;
+  --card-border: #ebd9bc;
+  --card-text: #5a4326;
+
+  --ink: #fdf6e3;
+  --ink-soft: #e8dcc4;
+  --ink-dim: #b9b0c8;
+
+  --font-serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-sans: "Quicksand", ui-rounded, "Segoe UI", system-ui, sans-serif;
+
+  --col-width: 480px;
+  --radius: 22px;
+  --radius-lg: 30px;
+
+  --ease: cubic-bezier(0.33, 0.7, 0.3, 1);
+  --fade: 420ms;
+
+  --shadow-soft: 0 18px 50px -20px rgba(8, 12, 28, 0.7);
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background:
+    radial-gradient(120% 80% at 50% -10%, #2c3a66 0%, var(--night) 55%, #182039 100%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* The single centered portrait column. Feels like a phone; stays contained on
+   desktop. Never sprawls full-width. */
+#root {
+  display: flex;
+  justify-content: center;
+}
+
+.app-shell {
+  width: 100%;
+  max-width: var(--col-width);
+  min-height: 100%;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: max(20px, env(safe-area-inset-top)) 20px
+    max(24px, env(safe-area-inset-bottom)) 20px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+/* gentle starfield behind everything (decorative, low-key) */
+.app-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1.4px 1.4px at 18% 12%, rgba(253, 246, 227, 0.7) 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 72% 8%, rgba(253, 246, 227, 0.5) 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 88% 22%, rgba(253, 246, 227, 0.6) 50%, transparent 51%),
+    radial-gradient(1.1px 1.1px at 40% 30%, rgba(253, 246, 227, 0.4) 50%, transparent 51%),
+    radial-gradient(1.3px 1.3px at 8% 40%, rgba(253, 246, 227, 0.45) 50%, transparent 51%);
+  opacity: 0.7;
+}
+
+/* ----------------------------- typography ------------------------------ */
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  line-height: 1.18;
+  margin: 0;
+}
+
+.narration {
+  font-family: var(--font-serif);
+  font-size: 1.32rem;
+  line-height: 1.55;
+  letter-spacing: 0.2px;
+  color: var(--ink);
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+
+.muted {
+  color: var(--ink-dim);
+}
+
+/* ------------------------------ buttons -------------------------------- */
+button {
+  font-family: var(--font-sans);
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+.btn-primary {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1.12rem;
+  letter-spacing: 0.3px;
+  color: #3a2a12;
+  background: linear-gradient(180deg, #f0bd72 0%, var(--amber) 70%, var(--amber-deep) 100%);
+  border-radius: 999px;
+  padding: 17px 30px;
+  min-height: 60px;
+  width: 100%;
+  box-shadow: 0 12px 28px -12px rgba(224, 164, 88, 0.7);
+  transition: transform 240ms var(--ease), box-shadow 240ms var(--ease), filter 240ms var(--ease);
+}
+.btn-primary:active {
+  transform: scale(0.97);
+  filter: brightness(0.98);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  filter: grayscale(0.3);
+  cursor: default;
+}
+
+.btn-ghost {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--ink-soft);
+  background: rgba(253, 246, 227, 0.07);
+  border: 1px solid rgba(253, 246, 227, 0.16);
+  border-radius: 999px;
+  padding: 13px 22px;
+  min-height: 52px;
+  transition: transform 220ms var(--ease), background 220ms var(--ease);
+}
+.btn-ghost:active {
+  transform: scale(0.97);
+}
+
+/* ------------------------------- cards --------------------------------- */
+.surface {
+  background: linear-gradient(180deg, rgba(253, 246, 227, 0.06), rgba(253, 246, 227, 0.03));
+  border: 1px solid rgba(253, 246, 227, 0.12);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(2px);
+}
+
+/* parchment card used for the parent bridge + scene frame */
+.parchment {
+  background: linear-gradient(180deg, #fdf6e6 0%, var(--card) 100%);
+  color: var(--card-text);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+
+/* --------------------------- motion helpers ---------------------------- */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fade-in var(--fade) var(--ease) both;
+}
+
+/* choice cards rest with a barely-there breathing scale */
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.012);
+  }
+}
+
+/* drifting stars for the conjuring wait — never a spinner */
+@keyframes drift {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.9;
+  }
+  85% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-120px) translateX(14px);
+    opacity: 0;
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* soft glowing "I'm reading to you" dot */
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.92);
+    box-shadow: 0 0 0 0 rgba(224, 164, 88, 0.0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+    box-shadow: 0 0 18px 4px rgba(224, 164, 88, 0.45);
+  }
+}
+
+.reading-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--amber);
+  animation: glow-pulse 1.7s var(--ease) infinite;
+}
+
+/* honor reduced motion: keep fades, drop ambient drift/breathing */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  .fade-in {
+    animation: fade-in 200ms ease both;
+  }
+}
+
+/* form controls */
+input[type="text"] {
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  color: var(--ink);
+  background: rgba(253, 246, 227, 0.08);
+  border: 1px solid rgba(253, 246, 227, 0.2);
+  border-radius: 16px;
+  padding: 15px 16px;
+  width: 100%;
+  min-height: 54px;
+  outline: none;
+  transition: border 200ms var(--ease), background 200ms var(--ease);
+}
+input[type="text"]::placeholder {
+  color: var(--ink-dim);
+}
+input[type="text"]:focus {
+  border-color: var(--amber);
+  background: rgba(253, 246, 227, 0.12);
+}
+
+/* utility */
+.stack {
+  display: flex;
+  flex-direction: column;
+}
+.center {
+  align-items: center;
+  text-align: center;
+}
+.grow {
+  flex: 1 1 auto;
+}
+.row {
+  display: flex;
+  align-items: center;
+}

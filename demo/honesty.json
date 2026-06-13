@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "title": "Ravi and the cracked acorn",
+  "child_name": "Ravi",
+  "age_band": "4-6",
+  "lesson_id": "honesty",
+  "lesson_one_line": "The truth feels lighter to carry than a hidden mistake.",
+  "setup_scenes": [
+    {
+      "narration": "Ravi the little rabbit was rolling the family's special shiny acorn across the nest. It slipped, and a tiny crack ran down its side.",
+      "scene": {
+        "setting": "cozy_nest",
+        "props": ["fallen_leaves"],
+        "characters": [
+          { "type": "rabbit", "size": "big", "holding": null, "pose": "reaching" }
+        ],
+        "mood": "tender"
+      }
+    },
+    {
+      "narration": "Soon he heard Grandpa Rabbit hopping home. Ravi's heart went thump, thump, thump.",
+      "scene": {
+        "setting": "cozy_nest",
+        "props": ["fallen_leaves", "single_flower"],
+        "characters": [
+          { "type": "rabbit", "size": "big", "holding": null, "pose": "looking_up" },
+          { "type": "rabbit", "size": "small", "holding": null, "pose": "walking" }
+        ],
+        "mood": "tender"
+      }
+    }
+  ],
+  "fork": {
+    "prompt": "What does Ravi do?",
+    "narration": "Ravi could tuck the cracked acorn under the leaves, or he could show Grandpa what happened.",
+    "scene": {
+      "setting": "cozy_nest",
+      "props": ["fallen_leaves"],
+      "characters": [
+        { "type": "rabbit", "size": "big", "holding": null, "pose": "reaching" },
+        { "type": "rabbit", "size": "small", "holding": null, "pose": "looking_up" }
+      ],
+      "mood": "tender"
+    },
+    "choices": [
+      {
+        "id": "tell_truth",
+        "label": "Show Grandpa what happened",
+        "scene": {
+          "setting": "cozy_nest",
+          "props": ["fallen_leaves"],
+          "characters": [
+            { "type": "rabbit", "size": "big", "holding": null, "pose": "offering" },
+            { "type": "rabbit", "size": "small", "holding": null, "pose": "looking_up" }
+          ],
+          "mood": "hopeful"
+        }
+      },
+      {
+        "id": "hide_it",
+        "label": "Hide it under the leaves",
+        "scene": {
+          "setting": "cozy_nest",
+          "props": ["fallen_leaves"],
+          "characters": [
+            { "type": "rabbit", "size": "big", "holding": null, "pose": "curled" }
+          ],
+          "mood": "tender"
+        }
+      }
+    ]
+  },
+  "branches": {
+    "tell_truth": {
+      "scenes": [
+        {
+          "narration": "Ravi held out the cracked acorn and told Grandpa the whole story. Grandpa knelt down and gave him a soft, warm hug.",
+          "scene": {
+            "setting": "cozy_nest",
+            "props": ["fallen_leaves", "single_flower"],
+            "characters": [
+              { "type": "rabbit", "size": "big", "holding": null, "pose": "offering" },
+              { "type": "rabbit", "size": "small", "holding": null, "pose": "looking_up" }
+            ],
+            "mood": "hopeful"
+          }
+        },
+        {
+          "narration": "They mended it together with a little sap and a lot of giggles. The crack became their favorite part.",
+          "scene": {
+            "setting": "cozy_nest",
+            "props": ["fallen_leaves", "single_flower"],
+            "characters": [
+              { "type": "rabbit", "size": "big", "holding": null, "pose": "perched" },
+              { "type": "rabbit", "size": "small", "holding": null, "pose": "perched" }
+            ],
+            "mood": "calm"
+          }
+        }
+      ],
+      "tone": "warm",
+      "ending": "The acorn still had its crack, but Ravi felt light as a feather."
+    },
+    "hide_it": {
+      "scenes": [
+        {
+          "narration": "Ravi slipped the acorn under the leaves and said nothing. All evening, the little hidden crack sat heavy in his chest.",
+          "scene": {
+            "setting": "cozy_nest",
+            "props": ["fallen_leaves"],
+            "characters": [
+              { "type": "rabbit", "size": "big", "holding": null, "pose": "curled" }
+            ],
+            "mood": "lonely"
+          }
+        }
+      ],
+      "tone": "gentle",
+      "ending": "No one knew about the acorn, but Ravi kept thinking about it, again and again.",
+      "explore_offer": "What could Ravi say to Grandpa tomorrow?"
+    }
+  },
+  "parent_bridge": {
+    "talk_prompt": "Ask Ravi why he felt lighter after he told Grandpa the truth.",
+    "lesson_recap": "Tonight's story was about telling the truth."
+  },
+  "guardian": {
+    "passed": true,
+    "age_appropriate": true,
+    "no_preaching": true,
+    "no_scary_or_punitive": true,
+    "notes": ""
+  }
+}

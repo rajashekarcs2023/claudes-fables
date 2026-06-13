@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "title": "Maya and the last loaf",
+  "child_name": "Maya",
+  "age_band": "4-6",
+  "lesson_id": "sharing",
+  "lesson_one_line": "Sharing can turn a lonely moment into a friend.",
+  "setup_scenes": [
+    {
+      "narration": "High on a moonlit branch, Maya the little crow held the very last warm loaf. Her tummy rumbled, and the night was quiet and cold.",
+      "scene": {
+        "setting": "night_branch",
+        "props": ["moon", "stars"],
+        "characters": [
+          { "type": "crow", "size": "big", "holding": "bread", "pose": "perched" }
+        ],
+        "mood": "tender"
+      }
+    },
+    {
+      "narration": "A smaller crow fluttered down beside her, looking up with hungry eyes. He had nothing at all to eat tonight.",
+      "scene": {
+        "setting": "night_branch",
+        "props": ["moon", "stars"],
+        "characters": [
+          { "type": "crow", "size": "big", "holding": "bread", "pose": "perched" },
+          { "type": "crow", "size": "small", "holding": null, "pose": "looking_up" }
+        ],
+        "mood": "tender"
+      }
+    }
+  ],
+  "fork": {
+    "prompt": "What does Maya do?",
+    "narration": "Maya looked at the warm loaf, and then at the little crow's hungry eyes.",
+    "scene": {
+      "setting": "night_branch",
+      "props": ["moon", "stars"],
+      "characters": [
+        { "type": "crow", "size": "big", "holding": "bread", "pose": "perched" },
+        { "type": "crow", "size": "small", "holding": null, "pose": "looking_up" }
+      ],
+      "mood": "tender"
+    },
+    "choices": [
+      {
+        "id": "share",
+        "label": "Share the bread",
+        "scene": {
+          "setting": "night_branch",
+          "props": ["moon", "stars"],
+          "characters": [
+            { "type": "crow", "size": "big", "holding": "bread", "pose": "offering" },
+            { "type": "crow", "size": "small", "holding": null, "pose": "looking_up" }
+          ],
+          "mood": "hopeful"
+        }
+      },
+      {
+        "id": "keep",
+        "label": "Keep it for myself",
+        "scene": {
+          "setting": "night_branch",
+          "props": ["moon", "stars"],
+          "characters": [
+            { "type": "crow", "size": "big", "holding": "bread", "pose": "curled" }
+          ],
+          "mood": "tender"
+        }
+      }
+    ]
+  },
+  "branches": {
+    "share": {
+      "scenes": [
+        {
+          "narration": "Maya broke the loaf in two and held half out to the little crow. His eyes went bright as morning.",
+          "scene": {
+            "setting": "night_branch",
+            "props": ["moon", "stars", "fireflies"],
+            "characters": [
+              { "type": "crow", "size": "big", "holding": "bread", "pose": "offering" },
+              { "type": "crow", "size": "small", "holding": "bread", "pose": "looking_up" }
+            ],
+            "mood": "hopeful"
+          }
+        },
+        {
+          "narration": "They nibbled together, wing against wing, while the fireflies blinked all around them.",
+          "scene": {
+            "setting": "night_branch",
+            "props": ["moon", "stars", "fireflies"],
+            "characters": [
+              { "type": "crow", "size": "big", "holding": null, "pose": "perched" },
+              { "type": "crow", "size": "small", "holding": null, "pose": "perched" }
+            ],
+            "mood": "calm"
+          }
+        }
+      ],
+      "tone": "warm",
+      "ending": "The branch felt warmer with two crows on it than it ever had with one."
+    },
+    "keep": {
+      "scenes": [
+        {
+          "narration": "Maya tucked the whole loaf close and nibbled it on her own. The little crow gave a small nod and flew off into the dark.",
+          "scene": {
+            "setting": "night_branch",
+            "props": ["moon", "stars"],
+            "characters": [
+              { "type": "crow", "size": "big", "holding": "bread", "pose": "curled" }
+            ],
+            "mood": "lonely"
+          }
+        }
+      ],
+      "tone": "gentle",
+      "ending": "Maya was full, but the branch felt very big, and very quiet.",
+      "explore_offer": "What else could Maya have done with the loaf?"
+    }
+  },
+  "parent_bridge": {
+    "talk_prompt": "Ask Maya why the branch felt warmer after she shared the loaf.",
+    "lesson_recap": "Tonight's story was about sharing."
+  },
+  "guardian": {
+    "passed": true,
+    "age_appropriate": true,
+    "no_preaching": true,
+    "no_scary_or_punitive": true,
+    "notes": ""
+  }
+}

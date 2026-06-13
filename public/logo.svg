@@ -1,0 +1,50 @@
+<svg width="480" height="300" viewBox="0 0 480 300" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Claude's Fables">
+  <defs>
+    <clipPath id="card"><rect x="0" y="0" width="480" height="300" rx="36"/></clipPath>
+  </defs>
+  <g clip-path="url(#card)">
+    <!-- night sky -->
+    <rect x="0" y="0" width="480" height="300" fill="#1f2a4d"/>
+    <rect x="0" y="0" width="480" height="300" fill="#243056" opacity="0.5"/>
+
+    <!-- moon (crescent carved with a sky-coloured circle) -->
+    <g>
+      <circle cx="96" cy="74" r="34" fill="#F4E6C1"/>
+      <circle cx="82" cy="66" r="30" fill="#1f2a4d"/>
+    </g>
+
+    <!-- stars -->
+    <g fill="#FDF6E3">
+      <circle cx="170" cy="48" r="2.4" opacity="0.95"/>
+      <circle cx="210" cy="86" r="1.8" opacity="0.7"/>
+      <circle cx="290" cy="40" r="2.2" opacity="0.9"/>
+      <circle cx="350" cy="78" r="1.6" opacity="0.6"/>
+      <circle cx="408" cy="46" r="2.6" opacity="0.95"/>
+      <circle cx="438" cy="96" r="1.8" opacity="0.7"/>
+      <circle cx="150" cy="120" r="1.6" opacity="0.6"/>
+      <circle cx="402" cy="140" r="1.8" opacity="0.7"/>
+      <circle cx="60" cy="150" r="1.6" opacity="0.55"/>
+    </g>
+
+    <!-- branch -->
+    <path d="M300 118 C 350 108, 410 118, 470 110" stroke="#3a2c1f" stroke-width="9" stroke-linecap="round" fill="none"/>
+    <path d="M356 116 C 360 104, 372 100, 384 102" stroke="#3a2c1f" stroke-width="5" stroke-linecap="round" fill="none"/>
+
+    <!-- crow, perched (house style: body ellipse, wing ellipse, head circle, amber beak, cream eye) -->
+    <g transform="translate(360 70)">
+      <ellipse cx="6" cy="34" rx="26" ry="20" fill="#232a42"/>
+      <ellipse cx="14" cy="32" rx="18" ry="13" fill="#2e3656"/>
+      <circle cx="-16" cy="18" r="15" fill="#232a42"/>
+      <path d="M-30 16 l-13 4 l13 5 z" fill="#E0A458"/>
+      <circle cx="-18" cy="15" r="3.2" fill="#FDF6E3"/>
+      <path d="M-4 52 l0 12 M8 52 l0 12" stroke="#232a42" stroke-width="3.4" stroke-linecap="round"/>
+    </g>
+
+    <!-- title -->
+    <text x="240" y="206" text-anchor="middle" font-family="Fraunces, Georgia, 'Times New Roman', serif" font-style="italic" font-weight="500" font-size="30" fill="#F4E6C1" letter-spacing="0.5">Claude's</text>
+    <text x="240" y="256" text-anchor="middle" font-family="Fraunces, Georgia, 'Times New Roman', serif" font-weight="600" font-size="58" fill="#FDF6E3" letter-spacing="1">Fables</text>
+
+    <!-- amber underline flourish -->
+    <path d="M168 274 C 210 266, 270 266, 312 274" stroke="#E0A458" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.9"/>
+  </g>
+</svg>

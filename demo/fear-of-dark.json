@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "title": "Sam and the little lantern",
+  "child_name": "Sam",
+  "age_band": "4-6",
+  "lesson_id": "courage",
+  "lesson_one_line": "The dark feels softer when you carry your own small light.",
+  "setup_scenes": [
+    {
+      "narration": "When the sun went down, Sam the little fox curled up by the window. The forest outside turned deep and shadowy.",
+      "scene": {
+        "setting": "bedroom_window",
+        "props": ["moon", "stars"],
+        "characters": [
+          { "type": "fox", "size": "big", "holding": null, "pose": "curled" }
+        ],
+        "mood": "tender"
+      }
+    },
+    {
+      "narration": "A tiny lantern sat on the sill, glowing warm and golden. From the dark trees came a small, lonely sound.",
+      "scene": {
+        "setting": "bedroom_window",
+        "props": ["moon", "stars", "lantern"],
+        "characters": [
+          { "type": "fox", "size": "big", "holding": null, "pose": "looking_up" }
+        ],
+        "mood": "hopeful"
+      }
+    }
+  ],
+  "fork": {
+    "prompt": "What does Sam do?",
+    "narration": "Sam looked at the warm little lantern, and then out at the soft, dark forest.",
+    "scene": {
+      "setting": "bedroom_window",
+      "props": ["moon", "stars", "lantern"],
+      "characters": [
+        { "type": "fox", "size": "big", "holding": null, "pose": "looking_up" }
+      ],
+      "mood": "hopeful"
+    },
+    "choices": [
+      {
+        "id": "step_out",
+        "label": "Carry the lantern outside",
+        "scene": {
+          "setting": "forest_floor",
+          "props": ["moon", "stars", "lantern"],
+          "characters": [
+            { "type": "fox", "size": "big", "holding": "lantern", "pose": "walking" }
+          ],
+          "mood": "brave"
+        }
+      },
+      {
+        "id": "stay_in",
+        "label": "Stay curled up inside",
+        "scene": {
+          "setting": "bedroom_window",
+          "props": ["moon", "stars"],
+          "characters": [
+            { "type": "fox", "size": "big", "holding": null, "pose": "curled" }
+          ],
+          "mood": "tender"
+        }
+      }
+    ]
+  },
+  "branches": {
+    "step_out": {
+      "scenes": [
+        {
+          "narration": "Sam picked up the lantern and stepped onto the soft forest floor. Wherever the little light went, the dark turned gentle and gold.",
+          "scene": {
+            "setting": "forest_floor",
+            "props": ["moon", "stars", "lantern", "fireflies"],
+            "characters": [
+              { "type": "fox", "size": "big", "holding": "lantern", "pose": "walking" }
+            ],
+            "mood": "brave"
+          }
+        },
+        {
+          "narration": "The lonely sound was just a little bird, blinking in the glow. Together they watched the fireflies dance.",
+          "scene": {
+            "setting": "forest_floor",
+            "props": ["moon", "stars", "lantern", "fireflies"],
+            "characters": [
+              { "type": "fox", "size": "big", "holding": "lantern", "pose": "perched" },
+              { "type": "little_bird", "size": "small", "holding": null, "pose": "looking_up" }
+            ],
+            "mood": "calm"
+          }
+        }
+      ],
+      "tone": "warm",
+      "ending": "The forest was still dark, but Sam knew the light went wherever he did."
+    },
+    "stay_in": {
+      "scenes": [
+        {
+          "narration": "Sam stayed curled by the window and watched the trees from far away. The little sound faded, and the night stayed a mystery.",
+          "scene": {
+            "setting": "bedroom_window",
+            "props": ["moon", "stars"],
+            "characters": [
+              { "type": "fox", "size": "big", "holding": null, "pose": "curled" }
+            ],
+            "mood": "lonely"
+          }
+        }
+      ],
+      "tone": "gentle",
+      "ending": "Sam was cozy and safe, but he wondered all night what the little sound had been.",
+      "explore_offer": "What could Sam bring with him to feel brave?"
+    }
+  },
+  "parent_bridge": {
+    "talk_prompt": "Ask Sam what his own little lantern could be when the room feels dark.",
+    "lesson_recap": "Tonight's story was about being brave in the dark."
+  },
+  "guardian": {
+    "passed": true,
+    "age_appropriate": true,
+    "no_preaching": true,
+    "no_scary_or_punitive": true,
+    "notes": ""
+  }
+}
