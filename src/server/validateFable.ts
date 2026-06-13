@@ -55,6 +55,76 @@ export interface ValidationResult {
   errors: string[];
 }
 
+// ---------------------------------------------------------------------------
+// Sanitizer: coerce any near-miss scene-spec enum to the nearest VALID value
+// BEFORE validating. The renderer already self-heals unknown enums, so a
+// cosmetic near-miss (e.g. mood "curious", pose "sitting") should NOT cost us a
+// retry or a demo fallback — we just snap it to a safe neighbour. Structural
+// problems (missing fork, mismatched branch keys) are left for validateFable.
+// Mutates in place; safe to call before validateFable.
+// ---------------------------------------------------------------------------
+
+function coerceScene(scene: unknown): void {
+  if (!scene || typeof scene !== "object") return;
+  const s = scene as Record<string, unknown>;
+
+  if (!SETTINGS.includes(s.setting as Setting)) s.setting = "night_branch";
+  if (!MOODS.includes(s.mood as Mood)) s.mood = "tender";
+
+  if (Array.isArray(s.props)) {
+    s.props = (s.props as unknown[]).filter((p) => PROPS.includes(p as Prop));
+  } else {
+    s.props = [];
+  }
+
+  if (!Array.isArray(s.characters) || s.characters.length === 0) {
+    s.characters = [{ type: "crow", size: "big", holding: null, pose: "perched" }];
+  } else {
+    for (const c of s.characters as Array<Record<string, unknown>>) {
+      if (!c || typeof c !== "object") continue;
+      if (!CHAR_TYPES.includes(c.type as CharacterType)) c.type = "crow";
+      if (!SIZES.includes(c.size as CharacterSize)) c.size = "big";
+      if (c.holding !== undefined && !HOLDINGS.includes(c.holding as Holding)) c.holding = null;
+      if (!POSES.includes(c.pose as Pose)) c.pose = "perched";
+    }
+  }
+}
+
+function coerceNarratedScenes(arr: unknown): void {
+  if (!Array.isArray(arr)) return;
+  for (const ns of arr) {
+    if (ns && typeof ns === "object") coerceScene((ns as { scene?: unknown }).scene);
+  }
+}
+
+/** Snap out-of-enum scene values to safe neighbours across the whole fable. */
+export function coerceFable(obj: unknown): void {
+  if (!obj || typeof obj !== "object") return;
+  const f = obj as Record<string, unknown>;
+
+  coerceNarratedScenes(f.setup_scenes);
+
+  const fork = f.fork as Record<string, unknown> | undefined;
+  if (fork) {
+    coerceScene(fork.scene);
+    if (Array.isArray(fork.choices)) {
+      for (const c of fork.choices as Array<Record<string, unknown>>) {
+        if (c) coerceScene(c.scene);
+      }
+    }
+  }
+
+  const branches = f.branches as Record<string, { scenes?: unknown; tone?: unknown }> | undefined;
+  if (branches && typeof branches === "object") {
+    for (const key of Object.keys(branches)) {
+      const b = branches[key];
+      if (!b) continue;
+      coerceNarratedScenes(b.scenes);
+      if (b.tone !== "warm" && b.tone !== "gentle") b.tone = "gentle";
+    }
+  }
+}
+
 function isStr(v: unknown): v is string {
   return typeof v === "string" && v.length > 0;
 }
