@@ -55,10 +55,12 @@ logger = logging.getLogger("fable-teller")
 logging.basicConfig(level=logging.INFO)
 
 AGENT_NAME = os.getenv("AGENT_NAME", "fable-teller")
-TTS_MODEL = os.getenv("FABLE_TTS_MODEL", "cartesia/sonic-3")
+# A warm, expressive ElevenLabs voice for storytelling (far less robotic than a
+# neutral business voice). Swap the voice id / model with FABLE_VOICE /
+# FABLE_TTS_MODEL — run `uv run sample_voices.py` to audition options.
+TTS_MODEL = os.getenv("FABLE_TTS_MODEL", "elevenlabs/eleven_multilingual_v2")
 STT_MODEL = os.getenv("FABLE_STT_MODEL", "deepgram/nova-3")
-# A warm, gentle Cartesia voice. Override with FABLE_VOICE to taste.
-STORYTELLER_VOICE = os.getenv("FABLE_VOICE", "9626c31c-bec5-4cca-baa8-f8ba9e84c8bc")
+STORYTELLER_VOICE = os.getenv("FABLE_VOICE", "XrExE9yKIg1WjnnlVkGX")  # ElevenLabs "Matilda" — warm
 # Fast model for the warm conversational replies at the fork.
 CONV_MODEL = os.getenv("FABLE_CONV_MODEL", "claude-haiku-4-5")
 
