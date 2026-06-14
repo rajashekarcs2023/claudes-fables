@@ -58,7 +58,7 @@ AGENT_NAME = os.getenv("AGENT_NAME", "fable-teller")
 # A warm, expressive ElevenLabs voice for storytelling (far less robotic than a
 # neutral business voice). Swap the voice id / model with FABLE_VOICE /
 # FABLE_TTS_MODEL — run `uv run sample_voices.py` to audition options.
-TTS_MODEL = os.getenv("FABLE_TTS_MODEL", "elevenlabs/eleven_multilingual_v2")
+TTS_MODEL = os.getenv("FABLE_TTS_MODEL", "elevenlabs/eleven_v3")  # most expressive/emotional
 STT_MODEL = os.getenv("FABLE_STT_MODEL", "deepgram/nova-3")
 STORYTELLER_VOICE = os.getenv("FABLE_VOICE", "XrExE9yKIg1WjnnlVkGX")  # ElevenLabs "Matilda" — warm
 # Fast model for the warm conversational replies at the fork.
