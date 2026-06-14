@@ -58,7 +58,7 @@ export default function Story({
   const [pressing, setPressing] = useState<string | null>(null);
 
   const cancelled = useRef(false);
-  const choiceResolver = useRef<((id: string) => void) | null>(null);
+  const choiceResolver = useRef<((c: { id: string; viaTap: boolean }) => void) | null>(null);
 
   const showScene = (s: SceneSpec) => {
     setScene(s);
@@ -68,7 +68,7 @@ export default function Story({
   useEffect(() => {
     cancelled.current = false;
     narrator.onSpeaking(setReading);
-    narrator.onChoice((id) => choiceResolver.current?.(id));
+    narrator.onChoice((id) => choiceResolver.current?.({ id, viaTap: false }));
     void play();
     return () => {
       cancelled.current = true;
@@ -85,8 +85,14 @@ export default function Story({
   }
 
   async function play(): Promise<void> {
-    // 3) setup scenes — read aloud, hands-free
+    // a warm spoken hello to open the night
     setStage("play");
+    showScene(fable.setup_scenes[0].scene);
+    await say(`Hello ${fable.child_name || "little one"}. Snuggle in — your story is beginning.`);
+    if (cancelled.current) return;
+    await pause(300);
+
+    // 3) setup scenes — read aloud, hands-free
     for (const s of fable.setup_scenes) {
       if (cancelled.current) return;
       showScene(s.scene);
@@ -105,15 +111,23 @@ export default function Story({
     narrator.setChoices(
       fable.fork.choices.map((c) => ({ id: c.id, label: c.label, words: choiceWords(c.label, c.id) })),
     );
-    const id = await new Promise<string>((resolve) => {
-      choiceResolver.current = (x) => {
+    const { id, viaTap } = await new Promise<{ id: string; viaTap: boolean }>((resolve) => {
+      choiceResolver.current = (c) => {
         choiceResolver.current = null;
-        resolve(x);
+        resolve(c);
       };
     });
     narrator.setChoices(null);
     setShowCards(false);
     if (cancelled.current) return;
+
+    // The storyteller reacts to the choice out loud. A SPOKEN choice was already
+    // acknowledged in the conversation; a TAP gets a warm acknowledgement now.
+    if (viaTap) {
+      const label = fable.fork.choices.find((c) => c.id === id)?.label ?? "";
+      await narrator.acknowledge(label);
+      if (cancelled.current) return;
+    }
     setChosenId(id);
 
     // 5) consequence — the chosen branch plays out
@@ -138,7 +152,7 @@ export default function Story({
 
   const choose = (id: string) => {
     setPressing(null);
-    choiceResolver.current?.(id);
+    choiceResolver.current?.({ id, viaTap: true });
   };
 
   const branch = chosenId ? fable.branches[chosenId] : null;

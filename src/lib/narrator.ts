@@ -25,9 +25,11 @@ export interface Narrator {
   narrate(text: string): Promise<void>;
   /** Stop any current speech immediately. */
   stop(): void;
-  /** At the fork: let the child speak one of these choices (best-effort). */
+  /** At the fork: let the child speak / converse about these choices. */
   setChoices(choices: ChoiceListen[] | null): void;
-  /** Register the spoken-choice callback. */
+  /** The child TAPPED a choice — have the storyteller acknowledge it aloud. */
+  acknowledge(label: string): Promise<void>;
+  /** Register the spoken-choice callback (fires when the child SAYS a choice). */
   onChoice(cb: (id: string) => void): void;
   /** Register the "is the voice speaking right now" callback (drives the glow). */
   onSpeaking(cb: (on: boolean) => void): void;
@@ -69,6 +71,9 @@ class WebSpeechNarrator implements Narrator {
   setChoices() {
     /* no spoken choices on Web Speech */
   }
+  acknowledge(label: string): Promise<void> {
+    return this.narrate(`You chose to ${label.toLowerCase()}. Let's see what happens.`);
+  }
   onChoice() {
     /* never fires */
   }
@@ -100,9 +105,12 @@ class LiveKitNarrator implements Narrator {
   private seq = 0;
   private audioEls: HTMLAudioElement[] = [];
   private micRequested = false;
+  private childName = "little one";
+  private ackResolve: (() => void) | null = null;
 
   /** Connect + wait for the agent to be ready. Throws if it can't within timeout. */
   async connect(req: { situation: string; child_name: string; age_band: string }): Promise<void> {
+    this.childName = req.child_name || "little one";
     const res = await fetch("/api/token", {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -169,6 +177,10 @@ class LiveKitNarrator implements Narrator {
       case "choice":
         if (msg.id) this.choiceCb(String(msg.id));
         break;
+      case "ack_done":
+        this.ackResolve?.();
+        this.ackResolve = null;
+        break;
       default:
         break;
     }
@@ -215,10 +227,26 @@ class LiveKitNarrator implements Narrator {
         this.micRequested = true;
         this.room.localParticipant.setMicrophoneEnabled(true).catch(() => {});
       }
-      this.send({ t: "listen", choices });
+      this.send({ t: "listen", choices, child_name: this.childName });
     } else {
+      // leaving the fork — stop listening and mute the mic again
       this.send({ t: "unlisten" });
+      this.room?.localParticipant.setMicrophoneEnabled(false).catch(() => {});
     }
+  }
+
+  acknowledge(label: string): Promise<void> {
+    return new Promise((resolve) => {
+      const timer = setTimeout(() => {
+        this.ackResolve = null;
+        resolve();
+      }, 9000);
+      this.ackResolve = () => {
+        clearTimeout(timer);
+        resolve();
+      };
+      this.send({ t: "chose", id: "", label });
+    });
   }
   onChoice(cb: (id: string) => void) {
     this.choiceCb = cb;
