@@ -330,3 +330,189 @@ input[type="text"]:focus {
   display: flex;
   align-items: center;
 }
+
+/* ============================================================================
+   Cinematic story stage — the living world fills the top of the screen and
+   blends into a darker stage where the storyteller's words and the choices sit.
+   ========================================================================== */
+.story {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  /* bleed the scene to the column edges (cancel the app-shell padding) */
+  margin: calc(-1 * max(20px, env(safe-area-inset-top))) -20px 0;
+}
+
+.scene-band {
+  position: relative;
+  width: 100%;
+  height: 52dvh;
+  min-height: 258px;
+  overflow: hidden;
+  background: var(--night);
+  flex: none;
+}
+.scene-layer {
+  position: absolute;
+  inset: 0;
+  animation: scene-fade 650ms var(--ease) both,
+    ken-burns 26s ease-in-out infinite alternate;
+  will-change: opacity, transform;
+}
+.scene-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(130% 90% at 50% 4%, transparent 42%, rgba(12, 16, 38, 0.28) 100%),
+    linear-gradient(to bottom, transparent 50%, rgba(14, 18, 42, 0.55) 76%, var(--night) 100%);
+}
+
+@keyframes scene-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes ken-burns {
+  from { transform: scale(1.04) translate3d(0, 0, 0); }
+  to { transform: scale(1.12) translate3d(0, -1.5%, 0); }
+}
+
+.stage {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px max(22px, env(safe-area-inset-bottom));
+  margin-top: -40px; /* overlap the scrim for a seamless blend */
+}
+
+.reading-row {
+  min-height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.story-line {
+  font-family: var(--font-serif);
+  font-size: 1.44rem;
+  line-height: 1.5;
+  letter-spacing: 0.2px;
+  text-align: center;
+  color: var(--ink);
+  max-width: 30rem;
+  margin: 2px 0 0;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
+  min-height: 96px;
+}
+
+/* the fork */
+.fork {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.fork-q {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  color: var(--amber);
+  margin: 0;
+}
+.fork-cards {
+  width: 100%;
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+}
+.choice-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 0;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-soft);
+  transition: transform 220ms var(--ease), box-shadow 220ms var(--ease);
+  animation: breathe 5s ease-in-out infinite;
+}
+.choice-pic {
+  display: block;
+  width: 100%;
+  height: 108px;
+  overflow: hidden;
+}
+.choice-label {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  color: var(--card-text);
+  padding: 11px 8px 13px;
+  text-align: center;
+  line-height: 1.2;
+}
+.fork-hint {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: var(--ink-dim);
+  margin: 2px 0 0;
+}
+
+/* the parent bridge */
+.bridge {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.explore {
+  color: var(--ink-dim);
+  text-align: center;
+  margin: 0;
+  font-size: 0.95rem;
+}
+.bridge-card {
+  width: 100%;
+  background: linear-gradient(180deg, #fdf6e6 0%, var(--card) 100%);
+  color: var(--card-text);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.bridge-eyebrow {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  color: var(--amber-deep);
+}
+.bridge-prompt {
+  font-family: var(--font-serif);
+  font-size: 1.24rem;
+  line-height: 1.5;
+  margin: 0;
+}
+.bridge-recap {
+  font-size: 0.92rem;
+  opacity: 0.7;
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-layer { animation: scene-fade 200ms ease both; }
+  .choice-card { animation: none; }
+}

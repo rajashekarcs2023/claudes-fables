@@ -34,3 +34,8 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# python / voice-agent
+.venv
+__pycache__/
+*.pyc

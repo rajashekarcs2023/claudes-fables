@@ -2,19 +2,26 @@ import { defineConfig, loadEnv, type Plugin, type ViteDevServer } from "vite";
 import react from "@vitejs/plugin-react";
 
 /**
- * Dev-only middleware that serves POST /api/fable locally so the full kid loop
- * can be tested end-to-end without deploying. It calls the SAME handler the
- * Vercel serverless function uses (src/server/fable.ts), compiled on the fly via
- * Vite's SSR module loader. The handler reads ANTHROPIC_API_KEY from process.env
- * (loaded from .env below) — the key is never sent to the client.
+ * Dev-only middleware that serves the /api/* routes locally so the full app can
+ * be tested end-to-end without deploying. Each route calls the SAME handler the
+ * Vercel serverless function uses, compiled on the fly via Vite's SSR loader, so
+ * dev and prod share one implementation. Server-side env (ANTHROPIC_API_KEY,
+ * LIVEKIT_*) is loaded below and never sent to the client.
  */
-function fableApiPlugin(): Plugin {
+function devApiPlugin(): Plugin {
+  // route -> { module, export, fallback? }
+  const routes: Record<string, { mod: string; fn: string; fallback?: string }> = {
+    "/api/fable": { mod: "/src/server/fable.ts", fn: "handleFableRequest", fallback: "emergencyFallback" },
+    "/api/token": { mod: "/src/server/token.ts", fn: "handleTokenRequest" },
+  };
+
   return {
-    name: "dev-api-fable",
+    name: "dev-api",
     configureServer(server: ViteDevServer) {
       server.middlewares.use(async (req, res, next) => {
         const url = (req.url || "").split("?")[0];
-        if (url !== "/api/fable") return next();
+        const route = routes[url];
+        if (!route) return next();
         if (req.method !== "POST") {
           res.statusCode = 405;
           res.setHeader("content-type", "application/json");
@@ -24,29 +31,28 @@ function fableApiPlugin(): Plugin {
         let body = "";
         req.on("data", (chunk) => (body += chunk));
         req.on("end", async () => {
+          const parsed = body ? safeParse(body) : {};
           try {
-            const mod = await server.ssrLoadModule("/src/server/fable.ts");
-            const parsed = body ? JSON.parse(body) : {};
-            const result = await mod.handleFableRequest(parsed);
+            const mod = await server.ssrLoadModule(route.mod);
+            const result = await mod[route.fn](parsed);
             res.statusCode = result.status || 200;
             res.setHeader("content-type", "application/json");
             res.end(JSON.stringify(result.body));
           } catch (err) {
-            // The handler is supposed to fall back internally and never throw.
-            // This is the last-resort net so a child never sees an error.
+            // Handlers are supposed to never throw; this is the last-resort net.
             // eslint-disable-next-line no-console
-            console.error("[dev-api-fable] unexpected error:", err);
+            console.error(`[dev-api ${url}] unexpected error:`, err);
+            res.statusCode = 200;
+            res.setHeader("content-type", "application/json");
             try {
-              const mod = await server.ssrLoadModule("/src/server/fable.ts");
-              const fallback = await mod.emergencyFallback(
-                body ? safeParse(body) : {},
-              );
-              res.statusCode = 200;
-              res.setHeader("content-type", "application/json");
-              res.end(JSON.stringify(fallback));
+              if (route.fallback) {
+                const mod = await server.ssrLoadModule(route.mod);
+                res.end(JSON.stringify(await mod[route.fallback](parsed)));
+              } else {
+                res.end(JSON.stringify({ available: false, reason: "error" }));
+              }
             } catch {
               res.statusCode = 500;
-              res.setHeader("content-type", "application/json");
               res.end(JSON.stringify({ error: "fatal" }));
             }
           }
@@ -65,12 +71,20 @@ function safeParse(s: string): unknown {
 }
 
 export default defineConfig(({ mode }) => {
-  // Load .env into process.env so the dev middleware can read ANTHROPIC_API_KEY.
+  // Load .env into process.env so the dev middleware can read server-side keys.
   const env = loadEnv(mode, process.cwd(), "");
-  if (env.ANTHROPIC_API_KEY) process.env.ANTHROPIC_API_KEY = env.ANTHROPIC_API_KEY;
+  for (const k of [
+    "ANTHROPIC_API_KEY",
+    "LIVEKIT_URL",
+    "LIVEKIT_API_KEY",
+    "LIVEKIT_API_SECRET",
+    "AGENT_NAME",
+  ]) {
+    if (env[k]) process.env[k] = env[k];
+  }
 
   return {
-    plugins: [react(), fableApiPlugin()],
+    plugins: [react(), devApiPlugin()],
     server: { port: 5173, host: true },
     preview: { port: 4173, host: true },
     build: { outDir: "dist", sourcemap: false },

@@ -1,0 +1,14 @@
+[project]
+name = "fable-teller"
+version = "1.0.0"
+description = "Claude's Fables — the LiveKit storyteller voice agent"
+requires-python = ">=3.10, <3.14"
+dependencies = [
+    "livekit-agents[silero]==1.5.16",
+    "python-dotenv",
+]
+
+[tool.uv]
+# yarl 1.24.1 shipped a single cp310 wheel and no sdist, so it can't install on
+# 3.11+. Pin below it (same workaround the upstream LiveKit starter uses).
+constraint-dependencies = ["yarl<1.24"]
